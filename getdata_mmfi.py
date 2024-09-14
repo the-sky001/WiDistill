@@ -23,60 +23,6 @@ import random
 import numpy as np
 import random
 
-class WiFiDataAugmentation:
-    def __init__(self, noise_level=0.1, shift_range=2, scale_range=0.1, flip_prob=0.5, time_stretch_range=0.2, time_crop_range=0.1, target_length=342):
-        self.noise_level = noise_level
-        self.shift_range = shift_range
-        self.scale_range = scale_range
-        self.flip_prob = flip_prob
-        self.time_stretch_range = time_stretch_range
-        self.time_crop_range = time_crop_range
-        self.target_length = target_length
-
-    def add_noise(self, data):
-        noise = np.random.normal(0, self.noise_level, data.shape)
-        return data + noise
-
-    def shift(self, data):
-        max_shift = min(self.shift_range, data.shape[0])
-        shift = np.random.randint(-max_shift, max_shift)
-        return np.roll(data, shift, axis=0)
-
-    def scale(self, data):
-        factor = 1 + random.uniform(-self.scale_range, self.scale_range)
-        return data * factor
-
-    def flip(self, data):
-        if random.random() < self.flip_prob:
-            return np.flip(data, axis=0)
-        return data
-
-    def time_stretch(self, data):
-        factor = 1 + random.uniform(-self.time_stretch_range, self.time_stretch_range)
-        stretched_data = np.zeros((int(data.shape[0] * factor), data.shape[1]))
-        for i in range(data.shape[1]):
-            stretched_data[:, i] = np.interp(np.linspace(0, len(data[:, i]), len(stretched_data[:, i])), np.arange(len(data[:, i])), data[:, i])
-        return stretched_data
-
-    def time_crop_or_pad(self, data):
-        if len(data) > self.target_length:
-            start = np.random.randint(0, len(data) - self.target_length)
-            return data[start:start + self.target_length]
-        elif len(data) < self.target_length:
-            pad_width = self.target_length - len(data)
-            return np.pad(data, ((0, pad_width), (0, 0)), mode='constant')
-        else:
-            return data
-
-    def augment(self, data):
-        data = self.add_noise(data)
-        data = self.shift(data)
-        data = self.scale(data)
-        data = self.flip(data)
-        data = self.time_stretch(data)
-        data = self.time_crop_or_pad(data)
-        return data
-
 
 def decode_config(config):
     all_subjects = ['S01', 'S02', 'S03', 'S04', 'S05', 'S06', 'S07', 'S08', 'S09', 'S10', 'S11', 'S12', 'S13', 'S14',
@@ -210,9 +156,6 @@ class MMFi_Dataset(Dataset):
         self.wifi_transform = wifi_transform
         # self.label_encoder = label_encoder
         label_encoder = LabelEncoder()
-        # actions = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14',
-        #            'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27']
-        # actions = ['A02', 'A03', 'A04', 'A05', 'A13', 'A14', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A27']
         actions = ['A01', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A15', 'A16', 'A24', 'A25', 'A26']
         label_encoder.fit(actions)
     def get_scene(self, subject):
