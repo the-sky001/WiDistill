@@ -9,7 +9,7 @@ Xi'an Jiaotong University
 
 The task of "WiDistill" is to reduce the size of a large Wi-Fi dataset using trajectory matching-based distillation, creating a much smaller dataset that maintains similar performance to the original.
 
-(figure/overview.pdf)
+![1](figure/overview.jpg)
 
 # Getting Started
 First, download our repo:
