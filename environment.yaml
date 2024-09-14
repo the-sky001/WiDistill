@@ -1,4 +1,4 @@
-name: wtt3.7
+name: widistill
 channels:
   - pytorch
   - conda-forge
