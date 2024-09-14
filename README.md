@@ -31,19 +31,58 @@ conda activate widistill
 # Generating Expert Trajectories
 Before doing any distillation, you'll need to generate some expert trajectories using buffer.py
 ```python
-python buffer.py --dataset=xrf55 --model=xrf_CNN  --save_interval 1 --lr_teacher 0.01 --train_epochs=150 --num_experts=10 --buffer_path=/home/xxx/buffer/ --data_path=/home/xxx/xrf/new_data/
+python buffer.py --dataset=xrf55 --model=xrf_resnet18   --save_interval 1 --lr_teacher 0.01 --train_epochs=150 --num_experts=10 --buffer_path=/home/xxx/buffer/ --data_path=/home/xxx/xrf/new_data/
  ```
+
+
+```python
+python buffer.py --dataset=widar --model=widar_mlp  --save_interval 1 --lr_teacher 0.01 --train_epochs=200 --num_experts=10 --buffer_path=/home/xxx/buffer --data_path=/home/xxx/Widardata2
+ ```
+
+
+
+```python
+python buffer.py --dataset=mmfi --model=mmfi_resnet18 --save_interval 1 --lr_teacher 0.1 --train_epochs=150 --num_experts=2 --buffer_path=/home/xxx/buffer/  --data_path=/home/xxx/mmfi
+ ```
+
 
 # Distillation by Matching Training Trajectories
 The following command will then use the buffers we just generated to distill.
+* For Widar3.0
 ```python
-python distill.py --dataset=xrf55 --ipc=50 --syn_steps=1 --expert_epochs=2 --max_start_epoch=15   --lr_img=100 --lr_lr=1e-05 --model=xrf_resnet18 --lr_teacher=0.01 --buffer_path=/home/xxx/buffer --data_path=/home/xxx/xrf/new_data/
+python distill.py --dataset=widar --ipc=50 --syn_steps=50 --expert_epochs=2 --max_start_epoch=10 --dsa=True --load_all --lr_img=10 --batch_syn=2000 --lr_lr=1e-07 --model=widar_mlp --lr_teacher=0.01 --buffer_path=/home/xxx/result --data_path=/home/xxx/Widardata2
+ ```
+* For XRF55
+```python
+python distill.py --dataset=xrf55 --ipc=50 --syn_steps=2 --expert_epochs=2 --max_start_epoch=15 --lr_img=100 --lr_lr=1e-05 --model=xrf_resnet18 --lr_teacher=0.1 --batch_syn=20 --buffer_path=/home/xxx/buffer --data_path=/home/xxx/xrf/new_data/
+ ```
+  
+* For MM-Fi
+```python
+python distill.py --dataset=mmfi --ipc=50 --syn_steps=10 --expert_epochs=2 --max_start_epoch=15   --lr_img=1000 --lr_lr=1e-05 --model=mmfi_resnet18 --lr_teacher=0.01 --buffer_path=/home/xxx/ --data_path=/home/xxx/mmfi_new2
  ```
 
+# Evaluation
 
+* For Widar3.0
+```python
+python evaluation.py --dataset=widar --model=widar_mlp --data_dir=/home/xxx/images_best.pt --label_dir=/home/xxx/labels_best.pt
+ ```
 
+* For XRF55
+```python
+python evaluation.py --dataset=xrf55 --model=xrf_resnet18 --data_dir=/home/xxx/images_best.pt --label_dir=/home/xxx/labels_best.pt
+ ```
+  
+* For MM-Fi
+```python
+python evaluation.py --dataset=mmfi --model=mmfi_resnet18 --data_dir=/home/xxx/images_best.pt --label_dir=/home/xxx/labels_best.pt
+ ```
+# Acknowledgement
 
+Our work is implemented base on the following projects. We really appreciate their excellent open-source works!
 
+[mtt-distillation](https://github.com/GeorgeCazenavette/mtt-distillation)
 
 
 
