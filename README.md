@@ -93,6 +93,11 @@ The running code of the machine learning method is similar to that under the sam
 python evaluation.py --dataset=widar --model=widar_mlp --data_dir=/home/xxx/selected_features_ipc50.pt --label_dir=/home/xxx/selected_labels_ipc50.pt 
  ```
 
+## Updates 
+We provide additional artifacts for reproducibility:
+- Loss curves: trajectory matching loss, student training loss 
+- Real-vs-distilled feature-space visualization (PCA) 
+- Sensitivity summaries for J/K/α, preprocessing switches, matching horizon 
 
 
 # Acknowledgement
