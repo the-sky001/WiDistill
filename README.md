@@ -95,7 +95,8 @@ python evaluation.py --dataset=widar --model=widar_mlp --data_dir=/home/xxx/sele
 
 ## Updates 
 We provide additional artifacts for reproducibility:
-- Loss curves: trajectory matching loss, student training loss 
+- Loss curves: trajectory matching loss, student training loss
+  ![1](figure/loss_teacher.png)
 - Real-vs-distilled feature-space visualization (t-sne) 
 - Sensitivity summaries for J/K/α, preprocessing switches, matching horizon 
 
