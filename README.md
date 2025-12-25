@@ -102,8 +102,12 @@ We provide additional artifacts for reproducibility:
   student training loss:
   ![1](figure/loss_stu.png)
   
-- Real-vs-distilled feature-space visualization (t-sne) :
-  
+
+We visualize the feature distribution comparison using t-SNE to demonstrate that the distilled data faithfully mimics the original distribution.
+
+![t-SNE Comparison](figure/tsne_comparison_widar.png)
+*(Figure: t-SNE visualization of original vs. distilled features. The distilled samples (stars) effectively cover the distribution manifold of the original dataset (gray dots), capturing both class centers and boundary features.)*
+
 - Sensitivity summaries for J/K/α, preprocessing switches, matching horizon 
 
 
