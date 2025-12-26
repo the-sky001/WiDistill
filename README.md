@@ -109,6 +109,40 @@ We visualize the feature distribution comparison using t-SNE to demonstrate that
 *(Figure: t-SNE visualization of original vs. distilled features. The distilled samples (stars) effectively cover the distribution manifold of the original dataset (gray dots), capturing both class centers and boundary features.)*
 
 - Sensitivity summaries for J/K/α, preprocessing switches, matching horizon 
+## Sensitivity Summaries (Widar3.0, IPC=50)
+
+We conducted an ablation study on Widar3.0 (IPC=50) to evaluate the sensitivity of key hyperparameters: synthetic learning rate (alpha), expert matching epochs (J), and matching horizon (start epoch).
+
+### 1) Synthetic Learning Rate (alpha)
+
+**Control:** `syn_steps=30`, `expert_epochs=2`, `start_epoch=10`
+
+| alpha (lr_img) | Max Accuracy | Stability | Notes |
+|---:|---:|:---:|---|
+| 10 | 56.37% | Stable | Underfitting (too slow to converge). |
+| 100 (baseline) | ~60.00% | Stable | Best trade-off between speed and stability. |
+| 1000 | 62.07% | Unstable | High peak but drops (~43% at the end). |
+
+### 2) Expert Matching Epochs (J)
+
+| Expert Epochs (J) | Max Accuracy | Relative Improv. | Observation |
+|---:|---:|---:|---|
+| 1 | ~57.14% | -2.86% | Short-sighted: fails to capture long-term trajectory trends. |
+| 2 (Baseline) | ~60.00% | — | Standard setting. |
+| 3 | 64.45% | +4.45% | Significant gain: captures longer-term dependencies. |
+
+
+### 3) Matching Horizon (Start Epoch)
+
+**Control:** `lr_img=100`, `syn_steps=30`, `expert_epochs=2`
+
+| Start Epoch | Stage | Max Accuracy | Notes |
+|---:|---|---:|---|
+| 10 | Early | ~60.00% | Informative gradients. |
+| 50 | Middle | 17.18% (loss=NaN) | Failure: gradients too small / unstable. |
+| 100 | Late | 17.18% (loss=NaN) | Failure: vanishing gradients. |
+
+**Recommended default:** `alpha=100`, `J=3`, `start_epoch=10`
 
 
 # Acknowledgement
